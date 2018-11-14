@@ -2,22 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Session parsing</title>
+    <title>Result Session parsing</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-<h1>Please Input a file </h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="file" />
-    <input type="submit" class="btn btn-success" value="Send File"/>
-</form>
-{% if message %}
-<p class="text-danger">{{message}}</p>
-{% endif %}
-<div id="tester"></div>
 
+<div id="tester"></div>
+<script>
+
+var data = [{
+  x: ['giraffes', 'orangutans', 'monkeys'],
+  y: [20, 14, 23],
+  type: 'bar'
+}];
+
+Plotly.newPlot('tester', data);
+</script>
 </body>
 </html>

@@ -1,13 +1,10 @@
 from django.db import models
 
 # Create your models here.
-class File(models.Model):
-    created = models.DateTimeField(verbose_name='create', auto_now_add=True, blank=False)
+class CSVFile(models.Model):
+    title = models.CharField(verbose_name='title',default="default", max_length=100)
     file = models.FileField(upload_to='uploads/')
 
-    @staticmethod
-    def create(file):
-        a=File(file)
-        a.save()
+
 
 
