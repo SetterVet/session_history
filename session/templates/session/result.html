@@ -10,29 +10,27 @@
 <body>
 
 <div id="test"></div>
-{{ unique_dates }}
+
 <script>
-  var dates_in_seconds = {{ unique_dates }};
-  var dates = [];
-  for(i=0;i<dates_in_seconds.length;i++)
-  {
-    dates.push(new Date(dates_in_seconds[i] * 1000));
-  };
-  console.log(dates)
+  var jsonObject = JSON.parse('{{ response | escapejs }}');
+  var unique_dates = jsonObject.unique_dates;
+  var passed = jsonObject.passed;
+  var error = jsonObject.error;
+
   var trace1 = {
-  x: dates,
-  y: {{ passed }},
+  x: unique_dates,
+  y:  passed ,
   name: 'passed',
   type: 'bar'
 };
+console.log(trace1)
 
 var trace2 = {
-  x: dates,
-  y: {{ error }},
+  x: unique_dates,
+  y: error ,
   name: 'error',
   type: 'bar'
 };
-
 var data = [trace1, trace2];
 
 var layout = {barmode: 'group'};

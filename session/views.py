@@ -6,7 +6,7 @@ from .forms import UploadFileForm
 from .models import CSVFile
 import csv
 import json
-
+import jsonify
 
 def index(request):
     if request.method == 'POST':
@@ -54,8 +54,7 @@ def pass_vs_error_date(result):
     for i in range(len(created_at)):
         created_at[i] = datetime.strptime(created_at[i], '%Y-%m-%d %H:%M:%S %Z')
         created_at[i] = created_at[i].strftime('%Y-%m-%d')  # datetime.date(datetime.strptime(created_at[i], '%Y-%m-%d %H:%M:%S %Z'))
-        created_at[i] = datetime.strptime(created_at[i], '%Y-%m-%d')
-        created_at[i] = created_at[i].timestamp()
+
     dates, passed, error = list(), list(), list()
     for item in created_at:
         if item not in dates:
@@ -74,5 +73,6 @@ def result(request, pk):
     calculate = calc(pk)
 
     plot1_data = pass_vs_error_date(calculate)
-    return render(request, 'session/result.html', {'unique_dates': plot1_data[0], 'passed': plot1_data[1], 'error':
-        plot1_data[2]})
+    response = json.dumps({'unique_dates': plot1_data[0],'passed': plot1_data[1] , 'error': plot1_data[2]})
+
+    return render(request, 'session/result.html', {'response': response})
