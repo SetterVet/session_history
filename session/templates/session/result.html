@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load static from staticfiles %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,16 +9,35 @@
 </head>
 <body>
 
-<div id="tester"></div>
+<div id="test"></div>
+{{ unique_dates }}
 <script>
-
-var data = [{
-  x: ['giraffes', 'orangutans', 'monkeys'],
-  y: [20, 14, 23],
+  var dates_in_seconds = {{ unique_dates }};
+  var dates = [];
+  for(i=0;i<dates_in_seconds.length;i++)
+  {
+    dates.push(new Date(dates_in_seconds[i] * 1000));
+  };
+  console.log(dates)
+  var trace1 = {
+  x: dates,
+  y: {{ passed }},
+  name: 'passed',
   type: 'bar'
-}];
+};
 
-Plotly.newPlot('tester', data);
+var trace2 = {
+  x: dates,
+  y: {{ error }},
+  name: 'error',
+  type: 'bar'
+};
+
+var data = [trace1, trace2];
+
+var layout = {barmode: 'group'};
+
+Plotly.newPlot('test', data, layout);
 </script>
 </body>
 </html>
