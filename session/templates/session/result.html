@@ -19,7 +19,8 @@
   var passed = jsonObject.passed;
   var error = jsonObject.error;
   var bad_day = jsonObject.bad_day;
-  var error_bad_day = jsonObject.error_bad_day;
+  var error_percent = jsonObject.error_percent;
+  var error_count = jsonObject.error_count;
   var trace1 = {
   x: unique_dates,
   y:  passed ,
@@ -34,35 +35,33 @@ var trace2 = {
   name: 'error',
   type: 'bar'
 };
-var data = [trace1, trace2];
+
+var trace3 ={
+   type:'bar',
+   name: 'percent of failed per day',
+   color:'rgb(0,0,0)'
+};
+var data = [trace1, trace2, trace3];
 
 var my_annotation=new Array()
+  for(let i=0;i<bad_day.length;i++)
+  {
+  my_annotation.push({
+      x: bad_day[i],
+      y: error_count[i],
+      xref: 'x',
+      yref: 'y',
+      text: error_percent[i]+"%failed",
+      showarrow: true,
+      arrowhead: 15,
+      ax: -40,
+      ay: -30
+    });
+   }
 
-  my_annotation.push({
-      x: new Date(2014,7,28),
-      y: 2,
-      xref: 'x',
-      yref: 'y',
-      text: 'Annotation Text',
-      showarrow: true,
-      arrowhead: 15,
-      ax: 20,
-      ay: -30
-    })
-  my_annotation.push({
-    x: new Date(2014,7,29),
-      y: 2,
-      xref: 'x',
-      yref: 'y',
-      text: 'Annotation Text2',
-      showarrow: true,
-      arrowhead: 15,
-      ax: 20,
-      ay: -30
-    })
 var layout = {barmode: 'group',
 annotations: my_annotation,
-title: "Count of passed and error status of session"
+title: "Count of passed and error status of session.Arrow show percent error session per day(if percent more 25%)"
 
 };
 

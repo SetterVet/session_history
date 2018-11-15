@@ -84,18 +84,21 @@ def result(request, pk):
     calculate = calc(pk)
 
     plot1_data = pass_vs_error_date(calculate)
-    bad_day,error_bad_day=list(),list()
+    bad_day,error_percent,error_count=list(),list(),list()
     dates=plot1_data[0][:]
+    passeds=plot1_data[1][:]
     errors=plot1_data[2][:]
     for i in range(len(dates)):
-        if errors[i]>=3:
+        if 1.0*errors[i]/(errors[i]+passeds[i])>=0.25:
             bad_day.append(dates[i])
-            error_bad_day.append(errors[i])
+            error_percent.append(int(100.0*errors[i]/(errors[i]+passeds[i])))
+            error_count.append(errors[i])
+
 
     plot2_data=duration_vs_created_at(calculate)
-    response = json.dumps({'unique_dates': dates,'passed': plot1_data[1] , 'error': errors
-                           ,'bad_day':bad_day,'error_bad_day':error_bad_day,'created_at':plot2_data[0],
-                           'duration':plot2_data[1]})
+    response = json.dumps({'unique_dates': dates,'passed': passeds , 'error': errors
+                           ,'bad_day':bad_day,'error_percent':error_percent,'created_at':plot2_data[0],
+                           'duration':plot2_data[1],'error_count':error_count})
 
     return render(request, 'session/result.html', {'response': response})
 
