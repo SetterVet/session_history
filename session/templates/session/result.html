@@ -16,7 +16,8 @@
   var unique_dates = jsonObject.unique_dates;
   var passed = jsonObject.passed;
   var error = jsonObject.error;
-
+  var bad_day = jsonObject.bad_day;
+  var error_bad_day = jsonObject.error_bad_day;
   var trace1 = {
   x: unique_dates,
   y:  passed ,
@@ -33,7 +34,24 @@ var trace2 = {
 };
 var data = [trace1, trace2];
 
-var layout = {barmode: 'group'};
+var layout = {barmode: 'group',
+annotations: [
+    {
+      x: new Date(2014,7,28),
+      y: 2,
+      xref: 'x',
+      yref: 'y',
+      text: 'Annotation Text',
+      showarrow: true,
+      arrowhead: 15,
+      ax: 20,
+      ay: -30
+    }
+
+]
+
+
+};
 
 Plotly.newPlot('test', data, layout);
 </script>

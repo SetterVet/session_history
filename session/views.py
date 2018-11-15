@@ -75,7 +75,13 @@ def result(request, pk):
 
     plot1_data = pass_vs_error_date(calculate)
     bad_day,error_bad_day=list(),list()
-    response = json.dumps({'unique_dates': plot1_data[0],'passed': plot1_data[1] , 'error': plot1_data[2]
+    dates=plot1_data[0][:]
+    errors=plot1_data[2][:]
+    for i in range(len(dates)):
+        if errors[i]>=3:
+            bad_day.append(dates[i])
+            error_bad_day.append(errors[i])
+    response = json.dumps({'unique_dates': dates,'passed': plot1_data[1] , 'error': errors
                            ,'bad_day':bad_day,'error_bad_day':error_bad_day})
 
     return render(request, 'session/result.html', {'response': response})
