@@ -9,7 +9,9 @@
 </head>
 <body>
 
-<div id="test"></div>
+<a href="/"><button class="btn btn-success">Home<span class="glyphicon glyphicon-home"></span></button></a>
+<div id="plot1"></div>
+<div id="plot2"></div>
 
 <script>
   var jsonObject = JSON.parse('{{ response | escapejs }}');
@@ -34,9 +36,9 @@ var trace2 = {
 };
 var data = [trace1, trace2];
 
-var layout = {barmode: 'group',
-annotations: [
-    {
+var my_annotation=new Array()
+
+  my_annotation.push({
       x: new Date(2014,7,28),
       y: 2,
       xref: 'x',
@@ -46,14 +48,37 @@ annotations: [
       arrowhead: 15,
       ax: 20,
       ay: -30
-    }
-
-]
-
+    })
+  my_annotation.push({
+    x: new Date(2014,7,29),
+      y: 2,
+      xref: 'x',
+      yref: 'y',
+      text: 'Annotation Text2',
+      showarrow: true,
+      arrowhead: 15,
+      ax: 20,
+      ay: -30
+    })
+var layout = {barmode: 'group',
+annotations: my_annotation,
+title: "Count of passed and error status of session"
 
 };
 
-Plotly.newPlot('test', data, layout);
+Plotly.newPlot('plot1', data, layout);
+
+var created_at=jsonObject.created_at;
+var duration=jsonObject.duration;
+var trace3 = {
+  x: created_at,
+  y: duration,
+  mode: 'lines+markers',
+  type: 'scatter'
+};
+var data = [trace3];
+var layout={title:"Duration of sessions"}
+Plotly.newPlot('plot2', data,layout);
 </script>
 
 </body>
