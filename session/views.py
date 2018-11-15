@@ -22,7 +22,8 @@ def index(request):
         return HttpResponseRedirect('/result/' + str(current_input_file.pk))
 
     else:
-        return render(request, 'session/index.html')
+        updated_files=CSVFile.objects.all()
+        return render(request, 'session/index.html',{'files':updated_files})
 
 
 def calc(pk):
@@ -73,6 +74,8 @@ def result(request, pk):
     calculate = calc(pk)
 
     plot1_data = pass_vs_error_date(calculate)
-    response = json.dumps({'unique_dates': plot1_data[0],'passed': plot1_data[1] , 'error': plot1_data[2]})
+    bad_day,error_bad_day=list(),list()
+    response = json.dumps({'unique_dates': plot1_data[0],'passed': plot1_data[1] , 'error': plot1_data[2]
+                           ,'bad_day':bad_day,'error_bad_day':error_bad_day})
 
     return render(request, 'session/result.html', {'response': response})

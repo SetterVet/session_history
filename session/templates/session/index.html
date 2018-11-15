@@ -17,7 +17,13 @@
 {% if message %}
 <p class="text-danger">{{message}}</p>
 {% endif %}
-<div id="tester"></div>
-
+<div >
+{% if files %}
+    <h3>Last updated files</h3>
+    {% for file in files %}
+    <p><a href="/result/{{file.pk}}">{{file}}</a></p>
+    {% endfor %}
+{% endif %}
+</div>
 </body>
 </html>
