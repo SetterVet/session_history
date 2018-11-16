@@ -96,7 +96,7 @@ def result(request, pk):
     failed=plot1_data[3][:]
     stopped=plot1_data[4][:]
     for i in range(len(dates)):
-        if 1.0*errors[i]/(errors[i]+passeds[i]+failed[i]+stopped[i])>=0.25:
+        if 1.0*errors[i]/(errors[i]+passeds[i]+failed[i]+stopped[i]) >= 0.05:
             bad_day.append(dates[i])
             error_percent.append(int(100.0*errors[i]/(errors[i]+passeds[i]+failed[i]+stopped[i])))
             error_count.append(errors[i])
