@@ -22,6 +22,8 @@
   var bad_day = jsonObject.bad_day;
   var error_percent = jsonObject.error_percent;
   var error_count = jsonObject.error_count;
+  var failed = jsonObject.failed;
+  var stopped = jsonObject.stopped
   var trace1 = {
   x: unique_dates,
   y:  passed ,
@@ -38,11 +40,18 @@ var trace2 = {
 };
 
 var trace3 ={
-   type:'bar',
-   name: 'percent of failed per day',
-   color:'rgb(0,0,0)'
+   x: unique_dates,
+  y: failed ,
+  name: 'failed',
+  type: 'bar'
 };
-var data = [trace1, trace2, trace3];
+var trace4 ={
+  x: unique_dates,
+  y: stopped ,
+  name: 'stopped',
+  type: 'bar'
+};
+var data = [trace1, trace2, trace3,trace4];
 
 var my_annotation=new Array()
   for(let i=0;i<bad_day.length;i++)

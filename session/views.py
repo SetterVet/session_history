@@ -58,19 +58,24 @@ def pass_vs_error_date(result):
         created_at[i] = datetime.strptime(created_at[i], '%Y-%m-%d %H:%M:%S %Z')
         created_at[i] = created_at[i].strftime('%Y-%m-%d')  # datetime.date(datetime.strptime(created_at[i], '%Y-%m-%d %H:%M:%S %Z'))
 
-    dates, passed, error = list(), list(), list()
+    dates, passed, error,failed,stopped = list(), list(), list(),list(),list()
     for item in created_at:
         if item not in dates:
             dates.append(item)
             passed.append(0)
             error.append(0)
+            failed.append(0)
+            stopped.append(0)
     for i in range(len(summary_status)):
         if summary_status[i] == 'passed':
             passed[dates.index(created_at[i])] += 1
-        else:
+        elif summary_status[i] == 'error':
             error[dates.index(created_at[i])] += 1
-
-    return [dates, passed, error]
+        elif summary_status[i] == 'failed':
+            failed[dates.index(created_at[i])] += 1
+        elif summary_status[i] == 'stopped':
+            stopped[dates.index(created_at[i])] += 1
+    return [dates, passed, error,failed,stopped]
 
 def duration_vs_created_at(result):
     created_at = result[2][:]
@@ -88,17 +93,19 @@ def result(request, pk):
     dates=plot1_data[0][:]
     passeds=plot1_data[1][:]
     errors=plot1_data[2][:]
+    failed=plot1_data[3][:]
+    stopped=plot1_data[4][:]
     for i in range(len(dates)):
-        if 1.0*errors[i]/(errors[i]+passeds[i])>=0.25:
+        if 1.0*errors[i]/(errors[i]+passeds[i]+failed[i]+stopped[i])>=0.25:
             bad_day.append(dates[i])
-            error_percent.append(int(100.0*errors[i]/(errors[i]+passeds[i])))
+            error_percent.append(int(100.0*errors[i]/(errors[i]+passeds[i]+failed[i]+stopped[i])))
             error_count.append(errors[i])
 
 
     plot2_data=duration_vs_created_at(calculate)
     response = json.dumps({'unique_dates': dates,'passed': passeds , 'error': errors
                            ,'bad_day':bad_day,'error_percent':error_percent,'created_at':plot2_data[0],
-                           'duration':plot2_data[1],'error_count':error_count})
+                           'duration':plot2_data[1],'error_count':error_count,'failed':failed,'stopped':stopped})
 
     return render(request, 'session/result.html', {'response': response})
 
