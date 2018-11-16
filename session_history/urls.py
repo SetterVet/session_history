@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/',views.index,name="index"),
+    path('',views.index,name="index"),
     path('result/<int:pk>/',views.result,name='result'),
 
 ]
