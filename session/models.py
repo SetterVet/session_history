@@ -7,10 +7,3 @@ class CSVFile(models.Model):
     def __str__(self):
         return self.title
 
-
-class Comment(models.Model):
-    file=models.ForeignKey(CSVFile, related_name='CSV_file', on_delete=models.CASCADE)
-    bad_day=models.DateField()
-    comm=models.TextField()
-
-

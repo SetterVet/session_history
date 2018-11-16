@@ -89,25 +89,23 @@ def result(request, pk):
     calculate = calc(pk)
 
     plot1_data = pass_vs_error_date(calculate)
-    bad_day,error_percent,error_count=list(),list(),list()
+    bad_day,failing_percent=list(),list()
     dates=plot1_data[0][:]
     passeds=plot1_data[1][:]
     errors=plot1_data[2][:]
     failed=plot1_data[3][:]
     stopped=plot1_data[4][:]
     for i in range(len(dates)):
-        if 1.0*errors[i]/(errors[i]+passeds[i]+failed[i]+stopped[i]) >= 0.05:
+        if 1.0*(errors[i]+failed[i]+stopped[i])/(errors[i]+passeds[i]+failed[i]+stopped[i]) >= 0.25:
             bad_day.append(dates[i])
-            error_percent.append(int(100.0*errors[i]/(errors[i]+passeds[i]+failed[i]+stopped[i])))
-            error_count.append(errors[i])
+            failing_percent.append(int(100.0*(errors[i]+stopped[i]+failed[i])/(errors[i]+passeds[i]+failed[i]+stopped[i])))
+
 
 
     plot2_data=duration_vs_created_at(calculate)
     response = json.dumps({'unique_dates': dates,'passed': passeds , 'error': errors
-                           ,'bad_day':bad_day,'error_percent':error_percent,'created_at':plot2_data[0],
-                           'duration':plot2_data[1],'error_count':error_count,'failed':failed,'stopped':stopped})
+                           ,'failed':failed,'stopped':stopped,'bad_day':bad_day,'failing_percent':failing_percent,
+                           'created_at':plot2_data[0],'duration':plot2_data[1]})
 
     return render(request, 'session/result.html', {'response': response})
 
-def handler404(request):
-    return render(request, 'session/page404.html', status=404)

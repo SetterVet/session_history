@@ -19,11 +19,10 @@
   var unique_dates = jsonObject.unique_dates;
   var passed = jsonObject.passed;
   var error = jsonObject.error;
-  var bad_day = jsonObject.bad_day;
-  var error_percent = jsonObject.error_percent;
-  var error_count = jsonObject.error_count;
   var failed = jsonObject.failed;
-  var stopped = jsonObject.stopped
+  var stopped = jsonObject.stopped;
+  var bad_day = jsonObject.bad_day;
+  var failing_percent=jsonObject.failing_percent
   var trace1 = {
   x: unique_dates,
   y:  passed ,
@@ -52,26 +51,72 @@ var trace4 ={
   type: 'bar'
 };
 var data = [trace1, trace2, trace3,trace4];
-
+var PR = false;
 var my_annotation=new Array()
   for(let i=0;i<bad_day.length;i++)
   {
+  if (PR) {
   my_annotation.push({
       x: bad_day[i],
-      y: error_count[i],
+      y: 0,
       xref: 'x',
       yref: 'y',
-      text: error_percent[i]+"%failed",
+      text: bad_day[i],
       showarrow: true,
-      arrowhead: 15,
-      ax: -40,
-      ay: -30
+      font: {
+        family: 'Courier New, monospace',
+        size: 16,
+        color: '#ffffff'
+      },
+      align: 'center',
+      arrowhead: 2,
+      arrowsize: 1,
+      arrowwidth: 2,
+      arrowcolor: '#636363',
+      ax: 0,
+      ay: 30,
+      bordercolor: '#c7c7c7',
+      borderwidth: 2,
+      borderpad: 4,
+      bgcolor: '#ff7f0e',
+      opacity: 0.9
     });
+    }
+    else
+    {
+    my_annotation.push({
+      x: bad_day[i],
+      y: 0,
+      xref: 'x',
+      yref: 'y',
+      text: bad_day[i],
+      showarrow: true,
+      font: {
+        family: 'Courier New, monospace',
+        size: 16,
+        color: '#ffffff'
+      },
+      align: 'center',
+      arrowhead: 2,
+      arrowsize: 1,
+      arrowwidth: 2,
+      arrowcolor: '#636363',
+      ax: 0,
+      ay: 60,
+      bordercolor: '#c7c7c7',
+      borderwidth: 2,
+      borderpad: 4,
+      bgcolor: '#ff7f0e',
+      opacity: 0.9
+    });
+
+    }
+    if (PR){ PR = false;} else {PR = true;}
    }
 
 var layout = {barmode: 'stack',
 annotations: my_annotation,
-title: "Count of passed and error status of session.Arrow show percent error session per day(if percent more 25%)"
+title: "Count of passed and error status of session.Annotate days that have an 'abnormal' number(25% error + stopped + failed per day) of failing builds"
 
 };
 
